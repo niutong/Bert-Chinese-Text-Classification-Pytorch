@@ -10,7 +10,7 @@ class Config(object):
     """配置参数"""
     def __init__(self, dataset):
         self.model_name = 'bert'
-        self.train_path = dataset + '/data/train.txt'                                # 训练集
+        self.train_path = dataset + '/data/train_all.txt'                                # 训练集
         self.dev_path = dataset + '/data/dev.txt'                                    # 验证集
         self.test_path = dataset + '/data/test.txt'                                  # 测试集
         self.class_list = [x.strip() for x in open(
@@ -20,7 +20,7 @@ class Config(object):
 
         self.require_improvement = 1000                                 # 若超过1000batch效果还没提升，则提前结束训练
         self.num_classes = len(self.class_list)                         # 类别数
-        self.num_epochs = 1                                             # epoch数，默认3
+        self.num_epochs = 3                                             # epoch数，默认3
         self.batch_size = 128                                           # mini-batch大小
         self.pad_size = 32                                              # 每句话处理成的长度(短填长切)
         self.learning_rate = 5e-5                                       # 学习率
