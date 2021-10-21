@@ -16,6 +16,11 @@ def build_dataset(config):
                 lin = line.strip()
                 if not lin:
                     continue
+
+                data_list = lin.split('\t')
+                if len(data_list) != 2:
+                    print("ErrorDebug load_data_error: ", lin, data_list)
+                    continue
                 content, label = lin.split('\t')
                 token = config.tokenizer.tokenize(content)
                 token = [CLS] + token
