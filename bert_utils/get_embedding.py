@@ -1,11 +1,17 @@
 # coding: UTF-8
 
 import torch
-from pytorch_pretrained import BertTokenizer, BertModel, BertForMaskedLM
+import os, sys
+# 把当前文件所在文件夹的父文件夹路径加入到PYTHONPATH
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-bert_path = ".bert_pretrain"
+from pytorch_pretrained import BertTokenizer, BertModel
+
+bert_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/bert_pretrain"
+print(bert_path)
 PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
 pad_size = 32
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def get_bert_embedding(context):
     tokenizer = BertTokenizer.from_pretrained(bert_path)
@@ -28,15 +34,18 @@ def get_bert_embedding(context):
             token_ids = token_ids[:pad_size]
             seq_len = pad_size
 
-    tokens_tensor = torch.tensor([token_ids])
-    segments_tensors = torch.tensor([mask])
+    tokens_tensor = torch.LongTensor([token_ids]).to(device)
+    segments_tensors = torch.LongTensor([mask]).to(device)
     # Load pre-trained model (weights)
     bert_model = BertModel.from_pretrained(bert_path)
     # Put the model in "evaluation" mode, meaning feed-forward operation.
     bert_model.eval()
 
+    print(tokens_tensor)
+    print(segments_tensors)
+
     with torch.no_grad():
-        encoded_layers, pooled = bert_model(tokens_tensor, attention_mask=segments_tensors, output_all_encoded_layers=False)
+        encoded_layers, pooled = bert_model(tokens_tensor, attention_mask=segments_tensors, output_all_encoded_layers=True)
 
     print("Number of layers:", len(encoded_layers))
     layer_i = 0
