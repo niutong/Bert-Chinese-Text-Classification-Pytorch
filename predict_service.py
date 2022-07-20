@@ -63,7 +63,7 @@ def predict_from_file(file_path, model_name, dataset):
             probs = Softmax(outputs)
             max_prob, predicted = torch.max(probs, 1)
             # print("out_put:{}".format(outputs))
-            print("predict_tag:{} {} {} {}".format(src_contents[start_index], predicted, max_prob, probs))
+            print("predict_tag:{} {} {}".format(src_contents[start_index-1], predicted.cpu().numpy(), max_prob))
 
 
 if __name__ == '__main__':
