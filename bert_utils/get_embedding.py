@@ -79,9 +79,14 @@ def get_bert_embedding(context):
     print("sentence embedding size", sentence_embedding.shape)
     print("Our final sentence embedding vector of shape:"), sentence_embedding[0].shape[0]
     print(sentence_embedding)
-
+    return sentence_embedding[0]
 
 if __name__ == '__main__':
-    context = "越野"
-    get_bert_embedding(context)
+    contextA = "越野"
+    contextB = "体育"
+    x = get_bert_embedding(contextA)
+    y = get_bert_embedding(contextB)
+
+    similarity = torch.cosine_similarity(x, y, dim=0)
+    print('similarity', similarity)
 
