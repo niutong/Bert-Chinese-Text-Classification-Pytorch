@@ -37,7 +37,7 @@ def get_bert_embedding(context):
     tokens_tensor = torch.LongTensor([token_ids]).to(device)
     segments_tensors = torch.LongTensor([mask]).to(device)
     # Load pre-trained model (weights)
-    bert_model = BertModel.from_pretrained(bert_path)
+    bert_model = BertModel.from_pretrained(bert_path).to(device)
     # Put the model in "evaluation" mode, meaning feed-forward operation.
     bert_model.eval()
 
