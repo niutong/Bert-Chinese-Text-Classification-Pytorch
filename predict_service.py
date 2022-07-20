@@ -14,6 +14,7 @@ def predict_from_file(file_path, model_name, dataset):
     model = x.Model(config).to(config.device)
     model.load_state_dict(torch.load(config.save_path))
     model.eval()
+    print("load model over", config.save_path)
 
     pad_size = config.pad_size
     with open(file_path, 'r', encoding='UTF-8') as f:
@@ -38,20 +39,21 @@ def predict_from_file(file_path, model_name, dataset):
                     seq_len = pad_size
             contents.append((token_ids, seq_len, mask))
 
+    print("contents sum: ", len(contents))
     batch_size = 30
     start_index = 0
     while start_index < len(contents):
         batch_contents = contents[start_index: min(start_index+batch_size, len(contents))]
         start_index = start_index+batch_size
-
+        print("contents batch: ", start_index)
         np.random.seed(1)
         torch.manual_seed(1)
         torch.cuda.manual_seed_all(1)
         torch.backends.cudnn.deterministic = True  # 保证每次结果一样
         with torch.no_grad():
             x = torch.LongTensor([_[0] for _ in batch_contents]).to(config.device)
-            seq_len = torch.LongTensor([_[2] for _ in batch_contents]).to(config.device)
-            mask = torch.LongTensor([_[3] for _ in batch_contents]).to(config.device)
+            seq_len = torch.LongTensor([_[1] for _ in batch_contents]).to(config.device)
+            mask = torch.LongTensor([_[2] for _ in batch_contents]).to(config.device)
             outputs = model((x, seq_len, mask))
             print("out_put:{}".format(outputs))
 
