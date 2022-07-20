@@ -55,7 +55,9 @@ def predict_from_file(file_path, model_name, dataset):
             seq_len = torch.LongTensor([_[1] for _ in batch_contents]).to(config.device)
             mask = torch.LongTensor([_[2] for _ in batch_contents]).to(config.device)
             outputs = model((x, seq_len, mask))
+            predict_tag = torch.max(outputs.data, 1)[1].cpu().numpy()
             print("out_put:{}".format(outputs))
+            print("predict_tag:{}".format(predict_tag))
 
 
 if __name__ == '__main__':
