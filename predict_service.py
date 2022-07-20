@@ -9,6 +9,7 @@ PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
 
 def predict_from_file(file_path, model_name, dataset):
     contents = []
+    src_contents = []
     x = import_module('models.' + model_name)
     config = x.Config(dataset)
 
@@ -39,9 +40,10 @@ def predict_from_file(file_path, model_name, dataset):
                     token_ids = token_ids[:pad_size]
                     seq_len = pad_size
             contents.append((token_ids, seq_len, mask))
+            src_contents.append(content)
 
     print("contents sum: ", len(contents))
-    batch_size = 30
+    batch_size = 1
     start_index = 0
     Softmax = nn.Softmax(dim=1)
 
@@ -59,8 +61,9 @@ def predict_from_file(file_path, model_name, dataset):
             mask = torch.LongTensor([_[2] for _ in batch_contents]).to(config.device)
             outputs = model((x, seq_len, mask))
             probs = Softmax(outputs)
-            print("out_put:{}".format(outputs))
-            print("predict_tag:{}".format(probs))
+            max_prob, predicted = torch.max(probs, 1)
+            # print("out_put:{}".format(outputs))
+            print("predict_tag:{} {} {} {}".format(src_contents[start_index], predicted, max_prob, probs))
 
 
 if __name__ == '__main__':
