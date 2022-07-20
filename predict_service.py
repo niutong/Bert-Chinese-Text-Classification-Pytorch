@@ -3,6 +3,7 @@ import torch
 from importlib import import_module
 from tqdm import tqdm
 import numpy as np
+import torch.nn as nn
 
 PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
 
@@ -42,6 +43,8 @@ def predict_from_file(file_path, model_name, dataset):
     print("contents sum: ", len(contents))
     batch_size = 30
     start_index = 0
+    Softmax = nn.Softmax(dim=1)
+
     while start_index < len(contents):
         batch_contents = contents[start_index: min(start_index+batch_size, len(contents))]
         start_index = start_index+batch_size
@@ -55,9 +58,9 @@ def predict_from_file(file_path, model_name, dataset):
             seq_len = torch.LongTensor([_[1] for _ in batch_contents]).to(config.device)
             mask = torch.LongTensor([_[2] for _ in batch_contents]).to(config.device)
             outputs = model((x, seq_len, mask))
-            predict_tag = torch.max(outputs.data, 1)[1].cpu().numpy()
+            probs = Softmax(outputs)
             print("out_put:{}".format(outputs))
-            print("predict_tag:{}".format(predict_tag))
+            print("predict_tag:{}".format(probs))
 
 
 if __name__ == '__main__':
