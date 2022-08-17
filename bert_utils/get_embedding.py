@@ -8,7 +8,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pytorch_pretrained import BertTokenizer, BertModel
 
 bert_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/bert_pretrain"
-print(bert_path)
 PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
 pad_size = 32
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
