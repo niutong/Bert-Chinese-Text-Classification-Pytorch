@@ -11,7 +11,7 @@ def build_dataset(config):
 
     def load_dataset(path, pad_size=32):
         contents = []
-        with open(path, 'r', encoding='UTF-8') as f:
+        with open(path, 'r', encoding='UTF-8', errors='ignore') as f:
             for line in tqdm(f):
                 lin = line.strip()
                 if not lin:
