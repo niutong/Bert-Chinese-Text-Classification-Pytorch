@@ -18,15 +18,13 @@ def load_dataset(path):
     return contents
 
 
-
-
 if __name__ == '__main__':
 
     newsgroups = fetch_20newsgroups(subset='all', remove=('headers', 'footers', 'quotes'))
 
     data_set = load_dataset("/home/recommend_nearby/work_space/niu.tong/data/good_content_rate_sorted_1010_good_male.txt")
 
-    model = Top2Vec(documents=newsgroups.data, speed="fast-learn", workers=8)
+    model = Top2Vec(documents=data_set, speed="learn", workers=8)
 
     print("model.get_num_topics", model.get_num_topics())
     print("model.get_topic_sizes()", model.get_topic_sizes())
