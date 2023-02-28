@@ -81,11 +81,27 @@ def get_bert_embedding(context):
     return sentence_embedding[0]
 
 if __name__ == '__main__':
-    contextA = "越野"
-    contextB = "体育"
-    x = get_bert_embedding(contextA)
-    y = get_bert_embedding(contextB)
 
-    similarity = torch.cosine_similarity(x, y, dim=0)
-    print('similarity', similarity)
+    target_list = ["二月二龙抬头", "龙", "吃猪头肉", "理发", "剪头发", "二月初二", "理了个发", "二月二，龙抬头开启一年好兆头",
+                   "猪头", "周日", "星期天", "理发店", "龙台头", "雨天", "下雨天", "降温", "冷死", "节日快乐", "好日子", "过节",
+                   "开工大吉", "开门红", "初八", "大年初八", "开门大吉", "正月初八", "复工", "搞钱", "发发发"]
+
+    # contextA = "越野"
+    # contextB = "体育"
+    #
+    # x = get_bert_embedding(contextA)
+    # y = get_bert_embedding(contextB)
+
+    for i in range(len(target_list)-1):
+        j = i+1
+        while j < len(target_list):
+            x = get_bert_embedding[target_list[i]]
+            y = get_bert_embedding[target_list[j]]
+            j += 1
+
+            similarity = torch.cosine_similarity(x, y, dim=0)
+            print('similarity', target_list[i], target_list[j], similarity.cpu().numpy().tolist()[0])
+            break
+        break
+
 
