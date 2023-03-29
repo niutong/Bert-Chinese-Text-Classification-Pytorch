@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pytorch_pretrained import BertTokenizer, BertModel
 
+os.environ["CUDA_VISIBLE_DEVICES"] = '4,5,6,7'
 bert_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/bert_pretrain"
 PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
 pad_size = 32
@@ -95,12 +96,12 @@ if __name__ == '__main__':
     for i in range(len(target_list)-1):
         j = i+1
         while j < len(target_list):
-            x = get_bert_embedding[target_list[i]]
-            y = get_bert_embedding[target_list[j]]
+            x = get_bert_embedding(target_list[i])
+            y = get_bert_embedding(target_list[j])
             j += 1
 
             similarity = torch.cosine_similarity(x, y, dim=0)
-            print('similarity', target_list[i], target_list[j], similarity.cpu().numpy().tolist()[0])
+            print('similarity', target_list[i], target_list[j], round(similarity.cpu().numpy().tolist(), 3))
             break
         break
 
